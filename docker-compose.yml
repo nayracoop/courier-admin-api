@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  courier-admin-api:
+    build: ./
+    ports:
+      - "${PARSE_SERVER_LOCAL_PORT}:${PARSE_SERVER_PORT}"
+    links:
+      - mongo
+    volumes:
+      - .:/parse
+      - /parse/node_modules
+    depends_on:
+      - mongo
+
+  mongo:
+    image: mongo
+    ports:
+      - "${DB_LOCAL_PORT}:${DB_PORT}"
+    volumes:
+      - /data/db
+    command: "--smallfiles --logpath=/dev/null --setParameter failIndexKeyTooLong=false"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=$DB_USERNAME
+      - MONGO_INITDB_ROOT_PASSWORD=$DB_PASSWORD
+
+  parse-dashboard:
+    image: parseplatform/parse-dashboard
+    links:
+      - courier-admin-api
+    environment:
+      - PARSE_DASHBOARD_ALLOW_INSECURE_HTTP=$PARSE_DASHBOARD_ALLOW_INSECURE_HTTP
+      - PARSE_DASHBOARD_SERVER_URL=$PARSE_SERVER_URL
+      - PARSE_DASHBOARD_MASTER_KEY=$PARSE_SERVER_MASTER_KEY
+      - PARSE_DASHBOARD_APP_ID=$APP_ID
+      - PARSE_DASHBOARD_USER_ID=$PARSE_USER1
+      - PARSE_DASHBOARD_USER_PASSWORD=$PARSE_USER1_PASSWORD
+    ports:
+      - "${PARSE_DASHBOARD_LOCAL_PORT}:${PARSE_DASHBOARD_PORT}"
