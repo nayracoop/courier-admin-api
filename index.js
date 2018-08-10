@@ -3,6 +3,7 @@
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
+var cors = require('cors');
 require('dotenv').config();
 
 var databaseUri = process.env.MONGODB_URI;
@@ -29,6 +30,7 @@ var app = express();
 
 // Serve the Parse API on the /parse URL prefix
 var mountPath = process.env.PARSE_SERVER_MOUNT || '/parse';
+app.use(cors());
 app.use(mountPath, api);
 
 // Parse Server plays nicely with the rest of your web routes
