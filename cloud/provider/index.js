@@ -8,6 +8,8 @@ module.exports = {
       res.error('No providers received')
     }
 
+    // console.log(xubioService);
+
     // get xubio token. xubio.service
     xubioService.credential.getToken()
       .then(token => {

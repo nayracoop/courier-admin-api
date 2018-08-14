@@ -1,2 +1,2 @@
-module.exports = require("./xubio.credential.js");
-module.exports = require("./xubio.provider.js");
+exports.credential = require("./xubio.credential.js");
+exports.provider = require("./xubio.provider.js");
