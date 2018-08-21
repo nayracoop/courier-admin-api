@@ -24,7 +24,7 @@
         provider.set("businessName", provider.razonSocial);
         provider.set("phone", provider.telefono);
         provider.set("userCode", provider.usrCode);
-        
+
         return provider;
     }
 });
