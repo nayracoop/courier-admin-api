@@ -1,5 +1,8 @@
-var xubioService = require('../../services/xubio')
-var Provider = require('../../models/provider.js')
+const xubioService = require('../../services/xubio')
+const Provider = require('../../models/provider.js')
+const countries = require('../../common/countries.json')
+const arg_provinces = require('../../common/arg_provinces.json')
+const functions = require('../../common/functions.js')
 
 module.exports = {
   providerSync: (req, res) => {
@@ -94,6 +97,8 @@ function providerEquals(xubio, courier) {
 
 function castProvider(xubio) {
   let provider = {}
+  let isoCountry = {}
+  let isoProvince = {}
   provider.externalId = xubio.proveedorid
   provider.name = xubio.nombre
   provider.taxCategory = (xubio.categoriaFiscal ? xubio.categoriaFiscal.ID : null)
@@ -101,8 +106,14 @@ function castProvider(xubio) {
   provider.docValue = xubio.CUIT
   provider.purchaseAccount = (xubio.cuentaCompra_id ? xubio.cuentaCompra_id.ID : null)
   provider.saleAccount = (xubio.cuentaVenta_id ? xubio.cuentaVenta_id.ID : null)
-  provider.country = (xubio.pais ? xubio.pais.ID : null) // va a requerir MAP
-  provider.province = (xubio.provincia ? xubio.provincia.ID : null) // va a requerir MAP
+  if (xubio.pais) {
+    isoCountry = countries.find(el => functions.accent_fold(el.translations.es.toUpperCase()) === functions.accent_fold(xubio.pais.nombre.toUpperCase()))
+  }
+  if (isoCountry && isoCountry.numericCode === '032' && xubio.provincia) {
+    isoProvince = arg_provinces.find(el => functions.accent_fold(el.provincia_nombre.toUpperCase()) === functions.accent_fold(xubio.provincia.nombre.toUpperCase()))
+  }
+  provider.country = (isoCountry ? isoCountry.numericCode : null)
+  provider.province = (isoProvince ? isoProvince.provincia_id : null)
   provider.address = xubio.direccion
   provider.postalCode = xubio.codigoPostal
   provider.email = xubio.email
