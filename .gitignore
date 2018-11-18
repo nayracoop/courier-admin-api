@@ -34,3 +34,4 @@ node_modules
 unit_coverage
 typings
 .env
+.vscode/*

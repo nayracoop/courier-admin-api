@@ -1,1 +1,1 @@
-module.exports = require("./ups.shipping.js");
+module.exports = require('./ups.shipping.js')

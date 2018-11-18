@@ -1,16 +1,16 @@
 var xubioService = require('../../services/xubio')
-var Client = require('../../models/client.js')
+// var Client = require('../../models/client.js')
 
 module.exports = {
   clientSync: (req, res) => {
-     // get xubio token. xubio.service
-     xubioService.credential.getToken()
-       .then(token => {
-        // get all clients from Xubio
-          xubioService.client.getAll(token.token_type, token.access_token)
-            .then(clients => {
-               //res.success(clients)
-               processSync(token, clients, res)
+    // get xubio token. xubio.service
+    xubioService.credential.getToken()
+      .then(token => {
+      // get all clients from Xubio
+        xubioService.client.getAll(token.token_type, token.access_token)
+          .then(clients => {
+            // res.success(clients)
+            processSync(token, clients, res)
           })
           .catch()
       })
@@ -21,17 +21,18 @@ module.exports = {
 }
 
 // look for parse Client by externalId
-async function getClientByExternalId(id) {
+async function getClientByExternalId (id) {
   let query = new Parse.Query('Client')
-  var res = query.doesNotExist('deletedAt')
-  query.equalTo("externalId", id)
+  query.doesNotExist('deletedAt')
+    .equalTo('externalId', id)
   return query.find()
 }
 
 // looking for new clients from xubio
-async function processSync(token, clients, res) {
+async function processSync (token, clients, res) {
   let list = []
   let xubio = null
+  let results = null
 
   for (const item of clients) {
     results = await getClientByExternalId(item.cliente_id)
@@ -48,17 +49,17 @@ async function processSync(token, clients, res) {
     //     list.push(castClient(xubio))
     //   }
     // }
-   }
-    // send a response with all the clients not synched with xubio (new)
-   res.success(list)
+  }
+  // send a response with all the clients not synched with xubio (new)
+  res.success(list)
 }
 
-//get the client from xubio async
-async function getXubioClient(clientId, token) {
+// get the client from xubio async
+async function getXubioClient (clientId, token) {
   return xubioService.client.getById(clientId, token.token_type, token.access_token)
 }
 
-function castClient(xubio) {
+function castClient (xubio) {
   let client = {}
   client.externalId = xubio.cliente_id
   client.docValue = xubio.CUIT
