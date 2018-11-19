@@ -1,7 +1,7 @@
 const xubioService = require('../../services/xubio')
 // const Provider = require('../../models/provider.js')
 const countries = require('../../common/countries.json')
-const argProvinces = require('../../commP/arg_provinces.json')
+const argProvinces = require('../../common/arg_provinces.json')
 const functions = require('../../common/functions.js')
 
 module.exports = {
