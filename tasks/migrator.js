@@ -15,6 +15,7 @@ const migrationsPath = './migrations'
 
 let db = null
 let dbVersion = null
+let somethingRan = false
 
 const up = async (cb) => {
   await setup()
@@ -24,7 +25,7 @@ const up = async (cb) => {
       process.exit(0)
     }
     if (!files || !files.length) {
-      console.log('Nothing to migrate')
+      console.log('Nothing to migrate: no files')
       if (!cb) {
         process.exit(0)
       } else {
@@ -40,7 +41,7 @@ const up = async (cb) => {
           run(files)
         })
       } else {
-        console.log('Migration successful')
+        console.log(somethingRan ? 'Migration successful' : 'Nothing to migrate: already up to date')
         client.close()
         if (!cb) {
           process.exit(0)
@@ -69,6 +70,7 @@ const getFiles = (cb) => {
 
 const setVersion = (version) => {
   console.log(`Migrated to version: ${version}`)
+  somethingRan = true
 
   try {
     dbVersion.insertOne({
