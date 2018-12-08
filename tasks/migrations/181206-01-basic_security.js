@@ -75,7 +75,7 @@ const createUserByName = async (name) => {
 const assignUserToRole = async (role, user) => {
   try {
     role.getUsers().add(user)
-    role.save({}, { useMasterKey: true })
+    await role.save({}, { useMasterKey: true })
   } catch (e) {
     console.error(e)
   }
