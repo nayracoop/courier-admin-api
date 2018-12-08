@@ -18,56 +18,65 @@ exports.getVersion = () => {
  * @param {Object} cb is the callback, expects an error and a result (err, result)
  */
 exports.up = async (db, cb) => {
+  const ADMINISTRATOR = 'Administrador'
+  const OPERATOR = 'Operador'
+
   Parse.initialize(process.env.APP_ID, process.env.PARSE_SERVER_JAVASCRIPT_KEY)
   Parse.serverURL = process.env.PARSE_SERVER_URL
-
-  let roleACL = new Parse.ACL()
-  roleACL.setPublicReadAccess(true)
-
-  let rolesQuery = new Parse.Query(Parse.Role)
-  rolesQuery.equalTo('name', 'Administrador')
-  let adminRole = await rolesQuery.first()
+  Parse.masterKey = process.env.PARSE_SERVER_MASTER_KEY
 
   try {
-    if (!adminRole) {
-      adminRole = new Parse.Role('Administrador', roleACL)
-      adminRole = await adminRole.save()
-    }
-
-    rolesQuery.equalTo('name', 'Operador')
-    let operatorRole = await rolesQuery.first()
-
-    if (!operatorRole) {
-      operatorRole = new Parse.Role('Operador', roleACL)
-      operatorRole = await operatorRole.save()
-    }
-
-    let usersQuery = new Parse.Query(Parse.User)
-
-    usersQuery.equalTo('username', 'admin')
-    let userAdmin = await usersQuery.first()
-
-    if (!userAdmin) {
-      userAdmin = new Parse.User()
-      userAdmin = await userAdmin.save({ username: 'admin', password: 'abcd2134' })
-    }
-
-    usersQuery.equalTo('username', 'operator')
-    let userOperator = await usersQuery.first()
-
-    if (!userOperator) {
-      userOperator = new Parse.User()
-      userOperator = await userOperator.save({ username: 'operator', password: 'abcd2134' })
-    }
-
-    adminRole.getUsers().add(userAdmin)
-    adminRole.save()
-    operatorRole.getUsers().add(userOperator)
-    operatorRole.save()
+    const adminRole = await getRoleByName(ADMINISTRATOR)
+    const operatorRole = await getRoleByName(OPERATOR)
+    const adminUser = await getUserByName(ADMINISTRATOR)
+    const operatorUser = await getUserByName(OPERATOR)
+    await assignUserToRole(adminRole, adminUser)
+    await assignUserToRole(operatorRole, operatorUser)
   } catch (e) {
     console.error(e)
     cb(e, false)
   }
 
   cb(null, true)
+}
+
+const getRoleByName = async (name) => {
+  const rolesQuery = new Parse.Query(Parse.Role)
+  rolesQuery.equalTo('name', name)
+  let role = await rolesQuery.first()
+  if (!role) {
+    role = await createRoleByName(name)
+  }
+  return role
+}
+
+const createRoleByName = async (name) => {
+  const roleACL = new Parse.ACL()
+  roleACL.setPublicReadAccess(true)
+  const role = new Parse.Role(name, roleACL)
+  return role.save()
+}
+
+const getUserByName = async (name) => {
+  const usersQuery = new Parse.Query(Parse.User)
+  usersQuery.equalTo('username', name)
+  let user = await usersQuery.first()
+  if (!user) {
+    user = await createUserByName(name)
+  }
+  return user
+}
+
+const createUserByName = async (name) => {
+  const user = new Parse.User()
+  return user.save({ username: name, password: 'abcd1234' })
+}
+
+const assignUserToRole = async (role, user) => {
+  try {
+    role.getUsers().add(user)
+    role.save({}, { useMasterKey: true })
+  } catch (e) {
+    console.error(e)
+  }
 }
