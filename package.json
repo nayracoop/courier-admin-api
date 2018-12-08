@@ -9,14 +9,19 @@
   },
   "license": "",
   "dependencies": {
+    "assert": "^1.4.1",
     "cors": "^2.8.4",
     "dotenv": "^5.0.1",
     "express": "^4.16.3",
+    "jake": "^8.0.19",
+    "mongodb": "^3.1.10",
+    "parse": "^2.1.0",
     "parse-server": "^2.8.1",
     "request-promise": "^4.2.2"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "migration": "cd tasks && jake migrate"
   },
   "engines": {
     "node": ">=4.3"

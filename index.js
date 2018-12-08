@@ -1,18 +1,18 @@
 // Example express application adding the parse-server module to expose Parse
 // compatible API routes.
-var express = require('express')
-var ParseServer = require('parse-server').ParseServer
-var path = require('path')
-// var cors = require('cors');
+const express = require('express')
+const ParseServer = require('parse-server').ParseServer
+const path = require('path')
+// const cors = require('cors');
 require('dotenv').config()
 
-var databaseUri = process.env.MONGODB_URI
+const databaseUri = process.env.MONGODB_URI
 
 if (!databaseUri) {
   console.log('DATABASE_URI not specified, falling back to localhost.')
 }
 
-var api = new ParseServer({
+const api = new ParseServer({
   databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
   cloud: process.env.PARSE_SERVER_CLOUD_CODE_MAIN || path.join(__dirname, '/cloud/main.js'),
   appId: process.env.APP_ID || 'myAppId',
@@ -27,10 +27,10 @@ var api = new ParseServer({
 })
 
 // javascriptKey, restAPIKey, dotNetKey, clientKey
-var app = express()
+const app = express()
 
 // Serve the Parse API on the /parse URL prefix
-var mountPath = process.env.PARSE_SERVER_MOUNT || '/parse'
+const mountPath = process.env.PARSE_SERVER_MOUNT || '/parse'
 // app.use(cors());
 app.use(mountPath, api)
 
@@ -39,8 +39,8 @@ app.get('/', function (req, res) {
   res.status(403).send('I\'ve always dreamed of beeing a website.')
 })
 
-let port = process.env.PORT || 1337
-let httpServer = require('http').createServer(app)
+const port = process.env.PORT || 1337
+const httpServer = require('http').createServer(app)
 httpServer.listen(port, function () {
   console.log('parse-server running on port ' + port + '.')
 })
