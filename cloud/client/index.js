@@ -7,7 +7,7 @@ module.exports = {
     try {
       const token = await xubioService.credential.getToken()
       const clients = await xubioService.client.getAll(token.token_type, token.access_token)
-      const clientsList = processSync(token, clients, res)
+      const clientsList = await processSync(token, clients, res)
       res.success(clientsList)
     } catch (e) {
       console.error(e)
@@ -32,7 +32,6 @@ async function processSync (token, clients, res) {
 
   for (const item of clients) {
     results = await getClientByExternalId(item.cliente_id)
-
     if (results.length === 0) {
       xubio = await getXubioClient(item.cliente_id, token)
       list.push(castClient(xubio))
