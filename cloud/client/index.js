@@ -2,21 +2,17 @@ var xubioService = require('../../services/xubio')
 // var Client = require('../../models/client.js')
 
 module.exports = {
-  clientSync: (req, res) => {
+  clientSync: async (req, res) => {
     // get xubio token. xubio.service
-    xubioService.credential.getToken()
-      .then(token => {
-      // get all clients from Xubio
-        xubioService.client.getAll(token.token_type, token.access_token)
-          .then(clients => {
-            // res.success(clients)
-            processSync(token, clients, res)
-          })
-          .catch()
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    try {
+      const token = await xubioService.credential.getToken()
+      const clients = await xubioService.client.getAll(token.token_type, token.access_token)
+      const clientsList = processSync(token, clients, res)
+      res.success(clientsList)
+    } catch (e) {
+      console.error(e)
+      res.error(e)
+    }
   }
 }
 
@@ -41,17 +37,8 @@ async function processSync (token, clients, res) {
       xubio = await getXubioClient(item.cliente_id, token)
       list.push(castClient(xubio))
     }
-    // else {
-    //   //get all fields from Client - xubioService
-    //   xubio = await getXubioClient(item.proveedorid, token)
-    //   // check if all field are equals
-    //   if (!clientEquals(xubio, results[0])) {
-    //     list.push(castClient(xubio))
-    //   }
-    // }
   }
-  // send a response with all the clients not synched with xubio (new)
-  res.success(list)
+  return list
 }
 
 // get the client from xubio async

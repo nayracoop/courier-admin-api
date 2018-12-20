@@ -69,7 +69,7 @@ const getUserByName = async (name) => {
 
 const createUserByName = async (name) => {
   const user = new Parse.User()
-  return user.save({ username: name, password: 'abcd1234' })
+  return user.save({ username: name, email: `${name.toLowerCase()}@email.com`, password: 'abcd1234' })
 }
 
 const assignUserToRole = async (role, user) => {
