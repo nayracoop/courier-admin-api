@@ -1,4 +1,4 @@
-var upsService = require('../../services/ups')
+var upsService = require('../../operations/ups')
 
 module.exports = {
   labelRecovery: (req, res) => {

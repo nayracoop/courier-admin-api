@@ -1,4 +1,4 @@
-var xubioService = require('../../services/xubio')
+var xubioService = require('../../operations/xubio')
 
 module.exports = {
   getProducts: async (req, res) => {

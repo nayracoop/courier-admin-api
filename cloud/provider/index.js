@@ -1,4 +1,4 @@
-const xubioService = require('../../services/xubio')
+const xubioService = require('../../operations/xubio')
 // const Provider = require('../../models/provider.js')
 const countries = require('../../common/countries.json')
 const argProvinces = require('../../common/arg_provinces.json')

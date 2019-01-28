@@ -1,20 +1,4 @@
-var xubioService = require('../../services/xubio')
-// var Client = require('../../models/client.js')
-
-module.exports = {
-  clientSync: async (req, res) => {
-    // get xubio token. xubio.service
-    try {
-      const token = await xubioService.credential.getToken()
-      const clients = await xubioService.client.getAll(token.token_type, token.access_token)
-      const clientsList = await processSync(token, clients, res)
-      res.success(clientsList)
-    } catch (e) {
-      console.error(e)
-      res.error(e)
-    }
-  }
-}
+var xubioService = require('../../operations/xubio')
 
 // look for parse Client by externalId
 async function getClientByExternalId (id) {
@@ -64,4 +48,19 @@ function castClient (xubio) {
   client.phone = xubio.telefono
   client.userCode = xubio.usrCode
   return client
+}
+
+module.exports = {
+  clientSync: async (req, res) => {
+    // get xubio token. xubio.service
+    try {
+      const token = await xubioService.credential.getToken()
+      const clients = await xubioService.client.getAll(token.token_type, token.access_token)
+      const clientsList = await processSync(token, clients, res)
+      res.success(clientsList)
+    } catch (e) {
+      console.error(e)
+      res.error(e)
+    }
+  }
 }
