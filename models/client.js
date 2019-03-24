@@ -6,27 +6,43 @@ class Client extends Parse.Object {
   async sendToXubio () {
     const xubioClient = {}
 
-    xubioClient.CUIT = this.get('docValue')
-    xubioClient.categoriaFiscal.ID = this.get('taxCategory')
-    xubioClient.cuentaCompra_id.ID = this.get('purchaseAccount')
-    xubioClient.cuentaVenta_id.ID = this.get('saleAccount')
-    xubioClient.direccion = this.get('address')
-    xubioClient.email = this.get('email')
-    xubioClient.identificacionTributaria.ID = this.get('docType')
-    xubioClient.nombre = this.get('name')
-    xubioClient.pais.ID = this.get('country')
-    xubioClient.provincia.ID = this.get('province')
-    xubioClient.codigoPostal = this.get('postalCode')
-    xubioClient.observaciones = this.get('observation')
-    xubioClient.razonSocial = this.get('businessName')
-    xubioClient.telefono = this.get('phone')
-    xubioClient.usrCode = this.get('userCode')
+    try {
+      xubioClient.CUIT = this.get('docValue')
+      xubioClient.categoriaFiscal = {
+        ID: this.get('taxCategory')
+      }
+      xubioClient.cuentaCompra_id = {
+        ID: this.get('purchaseAccount')
+      }
+      xubioClient.cuentaVenta_id = {
+        ID: this.get('saleAccount')
+      }
+      xubioClient.direccion = this.get('address')
+      xubioClient.email = this.get('email')
+      xubioClient.identificacionTributaria = {
+        ID: this.get('docType')
+      }
+      xubioClient.nombre = this.get('name')
+      xubioClient.pais = {
+        ID: this.get('country')
+      }
+      xubioClient.provincia = {
+        ID: this.get('province')
+      }
+      xubioClient.codigoPostal = this.get('postalCode')
+      xubioClient.observaciones = this.get('observation')
+      xubioClient.razonSocial = this.get('businessName')
+      xubioClient.telefono = this.get('phone')
+      xubioClient.usrCode = this.get('userCode')
 
-    this.set('synchedAt', new Date())
-    await this.save()
+      this.set('synchedAt', new Date())
+      await this.save()
+    } catch (e) {
+      console.error(e)
+      throw (e)
+    }
   }
 
-  // class methods
   static async createFromXubio (xubioClient) {
     var client = new Client()
 

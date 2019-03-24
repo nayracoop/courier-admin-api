@@ -18,6 +18,4 @@ const getClients = async (tokenType, accessToken) => {
   return clients
 }
 
-module.exports = {
-  getClients
-}
+module.exports = getClients

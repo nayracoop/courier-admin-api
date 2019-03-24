@@ -23,6 +23,4 @@ const getToken = async () => {
   return token
 }
 
-module.exports = {
-  getToken
-}
+module.exports = getToken

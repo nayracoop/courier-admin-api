@@ -1,9 +1,6 @@
-// Example express application adding the parse-server module to expose Parse
-// compatible API routes.
 const express = require('express')
 const ParseServer = require('parse-server').ParseServer
 const path = require('path')
-// const cors = require('cors');
 require('dotenv').config()
 
 const databaseUri = process.env.MONGODB_URI

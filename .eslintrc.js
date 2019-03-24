@@ -6,6 +6,6 @@ module.exports = {
     "task": true
   },
   "rules": {
-    "one-var": ["error", "never"] 
+    "one-var": ["error", "never"]
   }
 }
