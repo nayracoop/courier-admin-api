@@ -12,6 +12,4 @@ const getClientsNotInExternalIds = async (xubioClients) => {
   return filteredClients
 }
 
-module.exports = {
-  getClientsNotInExternalIds
-}
+module.exports = getClientsNotInExternalIds

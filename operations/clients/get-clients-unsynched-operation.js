@@ -7,6 +7,4 @@ const getClientsUnsynched = async () => {
   return clients
 }
 
-module.exports = {
-  getClientsUnsynched
-}
+module.exports = getClientsUnsynched
