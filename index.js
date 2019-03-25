@@ -6,7 +6,7 @@ require('dotenv').config()
 const databaseUri = process.env.MONGODB_URI
 
 if (!databaseUri) {
-  console.log('DATABASE_URI not specified, falling back to localhost.')
+  console.error('DATABASE_URI not specified, falling back to localhost.')
 }
 
 const api = new ParseServer({

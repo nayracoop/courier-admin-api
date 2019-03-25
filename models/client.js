@@ -1,9 +1,11 @@
+const postClient = require('../operations/xubio/post-client-operation')
+
 class Client extends Parse.Object {
   constructor () {
     super('Client')
   }
 
-  async sendToXubio () {
+  async sendToXubio (xubioToken) {
     const xubioClient = {}
 
     try {
@@ -36,10 +38,14 @@ class Client extends Parse.Object {
       xubioClient.usrCode = this.get('userCode')
 
       this.set('synchedAt', new Date())
-      await this.save()
+      const parseSave = this.save()
+      const savedClient = postClient(xubioToken, xubioClient)
+
+      await parseSave
+      return await savedClient
     } catch (e) {
-      console.error(e)
-      throw (e)
+      console.error('ERROR', e.message)
+      // throw (e)
     }
   }
 

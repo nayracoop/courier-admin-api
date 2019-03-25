@@ -1,21 +1,27 @@
-var rp = require('request-promise')
+/* eslint camelcase: 0 */
+const rp = require('request-promise')
 
-// @tokenType string
-// @accessToken string
+// @token_type string
+// @access_token string
 // returns every xubio client associated to the token's account
-const getClients = async ({ tokenType, accessToken }) => {
-  let xubioApiClientEndpoint = process.env.XUBIO_API_URI + 'clienteBean'
-  let headers = {
-    'Authorization': tokenType + ' ' + accessToken
+const getClients = async ({ token_type, access_token }) => {
+  try {
+    const xubioApiClientEndpoint = process.env.XUBIO_API_URI + 'clienteBean'
+    const headers = {
+      'Authorization': token_type + ' ' + access_token
+    }
+    const options = {
+      url: xubioApiClientEndpoint,
+      method: 'GET',
+      headers,
+      json: true
+    }
+    const clients = await rp(options)
+    return clients
+  } catch (e) {
+    console.error(e)
+    throw (e)
   }
-  let options = {
-    url: xubioApiClientEndpoint,
-    method: 'GET',
-    headers,
-    json: true
-  }
-  const clients = await rp(options)
-  return clients
 }
 
 module.exports = getClients

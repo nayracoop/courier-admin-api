@@ -15,7 +15,7 @@ const clientsSync = async (req, res) => {
   const unsynchedParseClients = await getLocalClientsPromise
 
   const createClientsPromises = unsynchedXubioClients.map(Client.createFromXubio)
-  const sendClientsPromises = unsynchedParseClients.map(client => client.sendToXubio())
+  const sendClientsPromises = unsynchedParseClients.map(client => client.sendToXubio(xubioToken))
 
   await Promise.all(createClientsPromises.concat(sendClientsPromises))
 
