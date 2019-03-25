@@ -6,7 +6,7 @@ const Client = require('../../models/client')
 
 const clientsSync = async (req, res) => {
   const xubioToken = await getToken()
-  const xubioClients = await getClients(xubioToken.token_type, xubioToken.access_token)
+  const xubioClients = await getClients(xubioToken)
 
   const getXubioClientsPromise = getClientsNotInExternalIds(xubioClients)
   const getLocalClientsPromise = getClientsUnsynched()
@@ -19,7 +19,15 @@ const clientsSync = async (req, res) => {
 
   await Promise.all(createClientsPromises.concat(sendClientsPromises))
 
-  res.success(`Sincronizado con Xubio. ${unsynchedXubioClients.length} recibidos. ${unsynchedParseClients.length} enviados.`)
+  const message = `Sincronizado con Xubio. ${unsynchedXubioClients.length} recibidos. ${unsynchedParseClients.length} enviados.`
+
+  res.success({
+    message,
+    synched: [
+      unsynchedXubioClients,
+      unsynchedParseClients
+    ]
+  })
 }
 
 module.exports = clientsSync
