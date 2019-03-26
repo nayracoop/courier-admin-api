@@ -7,15 +7,15 @@ module.exports = {
     let items = req.params.items
     try {
       const token = await xubioService.credential.getToken()
-      try {
-        const budget = await xubioService.budget.create(token.token_type, token.access_token, createBudget(items, shippingId))
-        res.success(budget)
-      } catch (e) {
-        console.error(e)
-        res.error(e)
-      }
+      // try {
+      const budget = await xubioService.budget.create(token.token_type, token.access_token, createBudget(items, shippingId))
+      res.success(budget)
+      // } catch (e) {
+      // console.error(e)
+      // res.error(e)
+      // }
     } catch (e) {
-      console.error(e)
+      // console.error(e)
       res.error(e)
     }
   }
