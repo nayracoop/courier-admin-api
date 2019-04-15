@@ -26,7 +26,8 @@ function createBudget (data, id) {
   // let date = new Date()
   // let expirationDate = new Date(date + (1000 * 60 * 60 * 27 * 30))
 
-  xubioBudget.descripcion = 'Envío: ' + id
+  // console.log(data.description)
+  xubioBudget.descripcion = data.description // 'Envío: ' + id
   xubioBudget.fecha = data.date // date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
   xubioBudget.fechaVto = data.date // expirationDate.getFullYear() + '-' + ('0' + (expirationDate.getMonth() + 1)).slice(-2) + '-' + ('0' + expirationDate.getDate()).slice(-2)
   xubioBudget.moneda = { 'ID': -3, 'codigo': 'DOLARES', 'nombre': 'Dólares' }

@@ -28,7 +28,7 @@ function createItem (item, id) {
   // let date = new Date()
   // let expirationDate = new Date(date + (1000 * 60 * 60 * 27 * 30))
 
-  xubioPurchaseOrder.descripcion = 'Envío: ' + id
+  xubioPurchaseOrder.descripcion = item.description // 'Envío: ' + id
   xubioPurchaseOrder.fecha = item.date // date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2)
   xubioPurchaseOrder.fechaVto = item.date // expirationDate.getFullYear() + '-' + ('0' + (expirationDate.getMonth() + 1)).slice(-2) + '-' + ('0' + expirationDate.getDate()).slice(-2)
   xubioPurchaseOrder.moneda = { 'ID': -3, 'codigo': 'DOLARES', 'nombre': 'Dólares' }
