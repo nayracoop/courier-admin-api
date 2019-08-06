@@ -1,59 +1,46 @@
-const postClient = require('../operations/xubio/post-client-operation')
-
 class Client extends Parse.Object {
   constructor () {
     super('Client')
   }
 
-  async sendToXubio (xubioToken) {
+  castToXubio () {
     const xubioClient = {}
 
-    try {
-      xubioClient.CUIT = this.get('docValue')
-      xubioClient.categoriaFiscal = {
-        ID: this.get('taxCategory')
-      }
-      xubioClient.cuentaCompra_id = {
-        ID: this.get('purchaseAccount')
-      }
-      xubioClient.cuentaVenta_id = {
-        ID: this.get('saleAccount')
-      }
-      xubioClient.direccion = this.get('address')
-      xubioClient.email = this.get('email')
-      xubioClient.identificacionTributaria = {
-        ID: this.get('docType')
-      }
-      xubioClient.nombre = this.get('name')
-      xubioClient.pais = {
-        ID: this.get('country')
-      }
-      xubioClient.provincia = {
-        ID: this.get('province')
-      }
-      xubioClient.codigoPostal = this.get('postalCode')
-      xubioClient.observaciones = this.get('observation')
-      xubioClient.razonSocial = this.get('businessName')
-      xubioClient.telefono = this.get('phone')
-      xubioClient.usrCode = this.get('userCode')
-
-      this.set('synchedAt', new Date())
-      const parseSave = this.save()
-      const savedClient = postClient(xubioToken, xubioClient)
-
-      await parseSave
-      return await savedClient
-    } catch (e) {
-      console.error('ERROR', e.message)
-      // throw (e)
+    xubioClient.CUIT = this.get('docValue')
+    xubioClient.categoriaFiscal = {
+      ID: this.get('taxCategory')
     }
+    xubioClient.cuentaCompra_id = {
+      ID: this.get('purchaseAccount')
+    }
+    xubioClient.cuentaVenta_id = {
+      ID: this.get('saleAccount')
+    }
+    xubioClient.direccion = this.get('address')
+    xubioClient.email = this.get('email')
+    xubioClient.identificacionTributaria = {
+      ID: this.get('docType')
+    }
+    xubioClient.nombre = this.get('name')
+    xubioClient.pais = {
+      ID: this.get('country')
+    }
+    xubioClient.provincia = {
+      ID: this.get('province')
+    }
+    xubioClient.codigoPostal = this.get('postalCode')
+    xubioClient.observaciones = this.get('observation')
+    xubioClient.razonSocial = this.get('businessName')
+    xubioClient.telefono = this.get('phone')
+
+    return xubioClient
   }
 
   static async createFromXubio (xubioClient) {
     var client = new Client()
 
     try {
-      client.set('externalId', xubioClient.cliente_id.toString())
+      client.set('externalId', xubioClient.cliente_id)
       client.set('docValue', xubioClient.CUIT)
       client.set('taxCategory', (xubioClient.categoriaFiscal ? xubioClient.categoriaFiscal.ID : null))
       client.set('purchaseAccount', (xubioClient.cuentaCompra_id ? xubioClient.cuentaCompra_id.ID : null))
@@ -82,4 +69,6 @@ class Client extends Parse.Object {
 
 Parse.Object.registerSubclass('Client', Client)
 
-module.exports = Client
+module.exports = {
+  Client
+}

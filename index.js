@@ -16,11 +16,7 @@ const api = new ParseServer({
   masterKey: process.env.PARSE_SERVER_MASTER_KEY || '',
   javascriptKey: process.env.PARSE_SERVER_JAVASCRIPT_KEY || '',
   restAPIKey: process.env.PARSE_SERVER_REST_API_KEY || '',
-  // https if needed
   serverURL: process.env.PARSE_SERVER_URL || 'http://localhost:1337/parse'
-  // liveQuery: {
-  //   classNames: ["Posts", "Comments"] // query subscriptions
-  // }
 })
 
 // javascriptKey, restAPIKey, dotNetKey, clientKey

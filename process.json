@@ -5,7 +5,7 @@
         "args"            : [],
         "log_date_format" : "YYYY-MM-DD HH:mm Z",
         "watch"           : true,
-        "ignore_watch"    : ["[\\/\\\\]\\./", ".git", "node_modules", "logs"],
+        "ignore_watch"    : ["[\\/\\\\]\\./", ".git", "node_modules", "logs", "data", ".DS_Store"],
         "usePolling"      : true,
         "node_args"       : "",
         "merge_logs"      : false,

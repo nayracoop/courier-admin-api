@@ -18,7 +18,7 @@ services:
     ports:
       - "${DB_LOCAL_PORT}:${DB_PORT}"
     volumes:
-      - /data/db
+      - ./data/db:/data/db
     command: "--smallfiles --logpath=/dev/null --setParameter failIndexKeyTooLong=false"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=$DB_USERNAME
@@ -38,3 +38,5 @@ services:
       - PARSE_DASHBOARD_USER_PASSWORD=$PARSE_USER1_PASSWORD
     ports:
       - "${PARSE_DASHBOARD_LOCAL_PORT}:${PARSE_DASHBOARD_PORT}"
+    depends_on:
+      - mongo
