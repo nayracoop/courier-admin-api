@@ -58,6 +58,10 @@ class Provider extends Parse.Object {
       provider.set('userCode', xubioProvider.usrCode)
       provider.set('synchedAt', new Date())
 
+      provider.set('costsTable', [])
+      provider.set('shippingZones', [])
+      provider.set('fuelTable', [])
+
       await provider.save()
       return provider
     } catch (e) {

@@ -58,6 +58,9 @@ class Client extends Parse.Object {
       client.set('userCode', xubioClient.usrCode)
       client.set('synchedAt', new Date())
 
+      client.set('costsTable', [])
+      client.set('addresses', [])
+
       await client.save()
       return client
     } catch (e) {
