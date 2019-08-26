@@ -1,15 +1,12 @@
 class Product {
-  static castFromXubio (xubioProducts) {
-    const products = []
-    for (const xubioProduct of xubioProducts) {
-      const product = {}
-      product.externalId = xubioProduct.productoid
-      product.name = xubioProduct.nombre
-      product.code = xubioProduct.codigo
+  static castFromXubio (xubioProduct) {
+    const product = {}
 
-      products.push(product)
-    }
-    return products
+    product.externalId = xubioProduct.productoid
+    product.name = xubioProduct.nombre
+    product.code = xubioProduct.codigo
+
+    return product
   }
 }
 
