@@ -22,7 +22,7 @@ const getBudgets = async ({ token_type, access_token }) => {
     const budgets = await rp(options)
     return budgets
   } catch (e) {
-    console.error(e)
+    console.error(e.code, e.message)
     throw (e)
   }
 }

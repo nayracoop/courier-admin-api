@@ -22,7 +22,7 @@ const getClient = async ({ token_type, access_token }, clientId) => {
     const client = await rp(options)
     return client
   } catch (e) {
-    console.error(e)
+    console.error(e.code, e.message)
     throw (e)
   }
 }

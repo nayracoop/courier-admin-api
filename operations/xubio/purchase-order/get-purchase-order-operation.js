@@ -22,7 +22,7 @@ const getPurchaseOrder = async ({ token_type, access_token }, purchaseOrderId) =
     const purchaseOrder = await rp(options)
     return purchaseOrder
   } catch (e) {
-    console.error(e)
+    console.error(e.code, e.message)
     throw (e)
   }
 }

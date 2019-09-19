@@ -16,12 +16,13 @@ class Client extends Parse.Object {
     xubioClient.cuentaVenta_id = {
       ID: this.get('saleAccount')
     }
-    xubioClient.direccion = this.get('address')
     xubioClient.email = this.get('email')
     xubioClient.identificacionTributaria = {
       ID: this.get('docType')
     }
     xubioClient.nombre = this.get('name')
+
+    xubioClient.direccion = this.get('address')
     xubioClient.pais = {
       ID: this.get('country')
     }
@@ -29,6 +30,7 @@ class Client extends Parse.Object {
       ID: this.get('province')
     }
     xubioClient.codigoPostal = this.get('postalCode')
+
     xubioClient.observaciones = this.get('observation')
     xubioClient.razonSocial = this.get('businessName')
     xubioClient.telefono = this.get('phone')
@@ -45,13 +47,17 @@ class Client extends Parse.Object {
       client.set('taxCategory', (xubioClient.categoriaFiscal ? xubioClient.categoriaFiscal.ID : null))
       client.set('purchaseAccount', (xubioClient.cuentaCompra_id ? xubioClient.cuentaCompra_id.ID : null))
       client.set('saleAccount', (xubioClient.cuentaVenta_id ? xubioClient.cuentaVenta_id.ID : null))
-      client.set('address', xubioClient.direccion)
       client.set('email', xubioClient.email)
       client.set('docType', (xubioClient.identificacionTributaria ? xubioClient.identificacionTributaria.ID : null))
       client.set('name', xubioClient.nombre)
-      client.set('country', xubioClient.pais ? xubioClient.pais.ID : null) // va a requerir MAP
-      client.set('province', xubioClient.provincia ? xubioClient.provincia.ID : null) // va a requerir MAP
-      client.set('postalCode', xubioClient.codigoPostal)
+
+      client.set('address', {
+        streetAddress: xubioClient.direccion,
+        postalCode: xubioClient.codigoPostal,
+        province: xubioClient.provincia ? xubioClient.provincia.ID : null,
+        country: xubioClient.pais ? xubioClient.pais.ID : null
+      })
+
       client.set('observation', xubioClient.observaciones)
       client.set('businessName', xubioClient.razonSocial)
       client.set('phone', xubioClient.telefono)
@@ -64,7 +70,7 @@ class Client extends Parse.Object {
       await client.save()
       return client
     } catch (e) {
-      console.error(e)
+      console.error(e.code, e.message)
       throw (e)
     }
   }

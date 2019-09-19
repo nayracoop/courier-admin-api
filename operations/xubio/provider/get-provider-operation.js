@@ -22,7 +22,7 @@ const getProvider = async ({ token_type, access_token }, providerId) => {
     const provider = await rp(options)
     return provider
   } catch (e) {
-    console.error(e)
+    console.error(e.code, e.message)
     throw (e)
   }
 }

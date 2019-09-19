@@ -1,49 +1,52 @@
 const { getToken } = require('../../../operations/xubio/security/get-token-operation')
-// const { getProviders } = require('../../../operations/xubio/provider/get-providers-operation')
+const { getProvider } = require('../../../operations/xubio/provider/get-provider-operation')
+const { getProviders } = require('../../../operations/xubio/provider/get-providers-operation')
+
+const { postProvider } = require('../../../operations/xubio/provider/post-provider-operation')
 
 const { getProvidersUnsynched } = require('../../../operations/providers/get-providers-unsynched-operation')
-// const { getProvidersNotInExternalIds } = require('../../../operations/providers/get-providers-not-in-externalIds-operation')
-// const { Provider } = require('../../../models/provider')
+const { getProvidersNotInExternalIds } = require('../../../operations/providers/get-providers-not-in-externalIds-operation')
+const { Provider } = require('../../../models/provider')
 
 const syncProviders = async (req, res) => {
   try {
     const xubioToken = await getToken()
 
-    // let xubioProviders = null
+    let xubioProviders = null
 
-    // try {
-    //   xubioProviders = await getProviders(xubioToken)
-    // } catch (error) {
-    //   return res.error(1004, {
-    //     message: 'Se produjo un error obteniendo los detalles para sincronización',
-    //     internalMessage: error.message
-    //   })
-    // }
+    try {
+      xubioProviders = await getProviders(xubioToken)
+    } catch (error) {
+      return res.error(1004, {
+        message: 'Se produjo un error obteniendo los detalles para sincronización',
+        internalMessage: error.message
+      })
+    }
 
-    // const getXubioProvidersPromise = getProvidersNotInExternalIds(xubioProviders)
+    const getXubioProvidersPromise = getProvidersNotInExternalIds(xubioProviders)
     const getLocalProvidersPromise = getProvidersUnsynched()
 
-    // const unsynchedXubioProviders = await getXubioProvidersPromise
+    const unsynchedXubioProviders = await getXubioProvidersPromise
     const unsynchedParseProviders = await getLocalProvidersPromise
+    const providersToBeSent = unsynchedParseProviders.map(provider => provider.castToXubio())
 
-    // const createProvidersPromises = unsynchedXubioProviders.map(Provider.createFromXubio)
-    const sendProvidersPromises = unsynchedParseProviders.map(provider => provider.sendToXubio(xubioToken))
+    const fullUnsynchedXubioProviders = await Promise.all(unsynchedXubioProviders.map(provider => getProvider(xubioToken, provider.proveedorid)))
 
-    // await Promise.all(createProvidersPromises.concat(sendProvidersPromises))
-    await Promise.all(sendProvidersPromises)
+    const createProvidersPromises = fullUnsynchedXubioProviders.map(Provider.createFromXubio)
+    const sendProvidersPromises = providersToBeSent.map(postProvider)
 
-    // const message = `Sincronizado con Xubio. ${unsynchedXubioProviders.length} recibidos. ${unsynchedParseProviders.length} enviados.`
-    const message = `Sincronizado con Xubio. 0 recibidos. ${unsynchedParseProviders.length} enviados.`
+    await Promise.all(createProvidersPromises.concat(sendProvidersPromises))
+
+    const message = `Sincronizado con Xubio. ${unsynchedXubioProviders.length} recibidos. ${unsynchedParseProviders.length} enviados.`
 
     res.success({
       message,
-      // xubio: unsynchedXubioProviders.length,
-      xubio: 0,
+      xubio: unsynchedXubioProviders.length,
       parse: unsynchedParseProviders.length
     })
   } catch (error) {
     return res.error(1005, {
-      message: 'Se produjo un error obteniendo los detalles para sincronización',
+      friendlyMessage: 'Se produjo un error al intentar sincronizar',
       internalMessage: error.message
     })
   }

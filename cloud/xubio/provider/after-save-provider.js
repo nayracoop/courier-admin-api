@@ -29,6 +29,7 @@ const afterSaveProvider = async (req, res) => {
       })
     }
   } catch (error) {
+    console.error(error.code, error.message)
     return res.error(1001, {
       message: 'Se produjo un error al intentar sincronizar al proveedor',
       internalMessage: error.message

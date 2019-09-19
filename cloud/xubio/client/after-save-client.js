@@ -29,6 +29,7 @@ const afterSaveClient = async (req, res) => {
       })
     }
   } catch (error) {
+    console.error(error.code, error.message)
     return res.error(2001, {
       message: 'Se produjo un error al intentar sincronizar al cliente',
       internalMessage: error.message

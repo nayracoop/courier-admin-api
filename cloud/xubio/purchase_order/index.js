@@ -12,12 +12,12 @@ module.exports = {
           const purchaseOrder = await xubioService.purchaseOrder.create(token.token_type, token.access_token, createItem(item, shippingId))
           res.success(purchaseOrder)
         } catch (e) {
-          console.error(e)
+          console.error(e.code, e.message)
           res.error(e)
         }
       }
     } catch (e) {
-      console.error(e)
+      console.error(e.code, e.message)
       res.error(e)
     }
   }

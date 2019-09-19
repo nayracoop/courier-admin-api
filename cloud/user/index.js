@@ -54,7 +54,7 @@ module.exports = {
       await assignToRole(parseUser, role.objectId)
       return res.success(parseUser.toJSON())
     } catch (e) {
-      console.error(e)
+      console.error(e.code, e.message)
       return res.error(e)
     }
   },
@@ -74,7 +74,7 @@ module.exports = {
       }
       return res.success(users)
     } catch (e) {
-      console.error(e)
+      console.error(e.code, e.message)
       return res.error(e)
     }
   },
@@ -89,7 +89,7 @@ module.exports = {
       await assignRole(parseUser)
       return res.success(parseUser.toJSON())
     } catch (e) {
-      console.error(e)
+      console.error(e.code, e.message)
       return res.error(e)
     }
   },
@@ -111,7 +111,7 @@ module.exports = {
       await changeRoles(parseUser, role.objectId)
       return res.success(parseUser.toJSON())
     } catch (e) {
-      console.error(e)
+      console.error(e.code, e.message)
       return res.error(e)
     }
   }

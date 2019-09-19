@@ -22,7 +22,7 @@ const getProducts = async ({ token_type, access_token }) => {
     const products = await rp(options)
     return products
   } catch (e) {
-    console.error(e)
+    console.error(e.code, e.message)
     throw (e)
   }
 }
