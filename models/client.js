@@ -5,35 +5,36 @@ class Client extends Parse.Object {
 
   castToXubio () {
     const xubioClient = {}
+    const address = this.get('address')
 
-    xubioClient.CUIT = this.get('docValue')
+    xubioClient.nombre = this.get('name')
+    xubioClient.identificacionTributaria = {
+      ID: this.get('docType')
+    }
     xubioClient.categoriaFiscal = {
       ID: this.get('taxCategory')
+    }
+    xubioClient.provincia = {
+      ID: address ? address.province : 43
+    }
+    xubioClient.direccion = address ? address.streetAddress : ''
+    xubioClient.email = this.get('email')
+    xubioClient.telefono = this.get('phone')
+    xubioClient.razonSocial = this.get('businessName')
+    xubioClient.codigoPostal = address ? address.postalCode : ''
+    xubioClient.cuentaVenta_id = {
+      ID: this.get('saleAccount')
     }
     xubioClient.cuentaCompra_id = {
       ID: this.get('purchaseAccount')
     }
-    xubioClient.cuentaVenta_id = {
-      ID: this.get('saleAccount')
-    }
-    xubioClient.email = this.get('email')
-    xubioClient.identificacionTributaria = {
-      ID: this.get('docType')
-    }
-    xubioClient.nombre = this.get('name')
-
-    xubioClient.direccion = this.get('address')
     xubioClient.pais = {
-      ID: this.get('country')
+      ID: address ? address.country : 1
     }
-    xubioClient.provincia = {
-      ID: this.get('province')
-    }
-    xubioClient.codigoPostal = this.get('postalCode')
+    xubioClient.usrCode = this.get('userCode')
+    xubioClient.CUIT = this.get('docValue')
 
-    xubioClient.observaciones = this.get('observation')
-    xubioClient.razonSocial = this.get('businessName')
-    xubioClient.telefono = this.get('phone')
+    xubioClient.descripcion = this.get('observation')
 
     return xubioClient
   }
@@ -58,7 +59,7 @@ class Client extends Parse.Object {
         country: xubioClient.pais ? xubioClient.pais.ID : null
       })
 
-      client.set('observation', xubioClient.observaciones)
+      client.set('observation', xubioClient.descripcion)
       client.set('businessName', xubioClient.razonSocial)
       client.set('phone', xubioClient.telefono)
       client.set('userCode', xubioClient.usrCode)

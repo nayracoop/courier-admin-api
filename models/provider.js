@@ -5,35 +5,35 @@ class Provider extends Parse.Object {
 
   castToXubio () {
     const xubioProvider = {}
+    const address = this.get('address')
 
-    xubioProvider.CUIT = this.get('docValue')
+    xubioProvider.nombre = this.get('name')
+    xubioProvider.identificacionTributaria = {
+      ID: this.get('docType')
+    }
     xubioProvider.categoriaFiscal = {
       ID: this.get('taxCategory')
+    }
+    xubioProvider.provincia = {
+      ID: address ? address.province : 43
+    }
+    xubioProvider.direccion = address ? address.streetAddress : ''
+    xubioProvider.email = this.get('email')
+    xubioProvider.telefono = this.get('phone')
+    xubioProvider.razonSocial = this.get('businessName')
+    xubioProvider.codigoPostal = address ? address.postalCode : ''
+    xubioProvider.cuentaVenta_id = {
+      ID: this.get('saleAccount')
     }
     xubioProvider.cuentaCompra_id = {
       ID: this.get('purchaseAccount')
     }
-    xubioProvider.cuentaVenta_id = {
-      ID: this.get('saleAccount')
-    }
-    xubioProvider.email = this.get('email')
-    xubioProvider.identificacionTributaria = {
-      ID: this.get('docType')
-    }
-    xubioProvider.nombre = this.get('name')
-
-    xubioProvider.direccion = this.get('address')
     xubioProvider.pais = {
-      ID: this.get('country')
+      ID: address ? address.country : 1
     }
-    xubioProvider.provincia = {
-      ID: this.get('province')
-    }
-    xubioProvider.codigoPostal = this.get('postalCode')
-
+    xubioProvider.usrCode = this.get('userCode')
     xubioProvider.observaciones = this.get('observation')
-    xubioProvider.razonSocial = this.get('businessName')
-    xubioProvider.telefono = this.get('phone')
+    xubioProvider.CUIT = this.get('docValue')
 
     return xubioProvider
   }
@@ -50,7 +50,6 @@ class Provider extends Parse.Object {
       provider.set('email', xubioProvider.email)
       provider.set('docType', xubioProvider.identificacionTributaria && xubioProvider.identificacionTributaria.ID)
       provider.set('name', xubioProvider.nombre)
-      provider.set('observation', xubioProvider.observaciones)
 
       provider.set('address', {
         streetAddress: xubioProvider.direccion,
@@ -59,6 +58,7 @@ class Provider extends Parse.Object {
         country: xubioProvider.pais ? xubioProvider.pais.ID : null
       })
 
+      provider.set('observation', xubioProvider.observaciones)
       provider.set('businessName', xubioProvider.razonSocial)
       provider.set('phone', xubioProvider.telefono)
       provider.set('userCode', xubioProvider.usrCode)
