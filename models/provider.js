@@ -1,3 +1,5 @@
+const commonFunctions = require('../common/functions')
+
 class Provider extends Parse.Object {
   constructor () {
     super('Provider')
@@ -15,7 +17,7 @@ class Provider extends Parse.Object {
       ID: this.get('taxCategory')
     }
     xubioProvider.provincia = {
-      ID: address ? address.province : 43
+      nombre: address ? commonFunctions.getArgProvinceById(address.province).provincia_nombre : ''
     }
     xubioProvider.direccion = address ? address.streetAddress : ''
     xubioProvider.email = this.get('email')
@@ -29,7 +31,7 @@ class Provider extends Parse.Object {
       ID: this.get('purchaseAccount')
     }
     xubioProvider.pais = {
-      ID: address ? address.country : 1
+      nombre: address ? commonFunctions.getCountryByNumericCode(address.country).name : ''
     }
     xubioProvider.usrCode = this.get('userCode')
     xubioProvider.observaciones = this.get('observation')
@@ -54,8 +56,8 @@ class Provider extends Parse.Object {
       provider.set('address', {
         streetAddress: xubioProvider.direccion,
         postalCode: xubioProvider.codigoPostal,
-        province: xubioProvider.provincia ? xubioProvider.provincia.ID : null,
-        country: xubioProvider.pais ? xubioProvider.pais.ID : null
+        province: xubioProvider.provincia ? commonFunctions.getArgProvinceByName(xubioProvider.provincia.nombre).provincia_id : null,
+        country: xubioProvider.pais ? commonFunctions.getCountryByName(xubioProvider.pais.nombre).numericCode : null
       })
 
       provider.set('observation', xubioProvider.observaciones)

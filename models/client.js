@@ -1,3 +1,5 @@
+const commonFunctions = require('../common/functions')
+
 class Client extends Parse.Object {
   constructor () {
     super('Client')
@@ -55,8 +57,8 @@ class Client extends Parse.Object {
       client.set('address', {
         streetAddress: xubioClient.direccion,
         postalCode: xubioClient.codigoPostal,
-        province: xubioClient.provincia ? xubioClient.provincia.ID : null,
-        country: xubioClient.pais ? xubioClient.pais.ID : null
+        province: xubioClient.provincia ? commonFunctions.getArgProvinceByName(xubioClient.provincia.nombre).provincia_id : null,
+        country: xubioClient.pais ? commonFunctions.getCountryByName(xubioClient.pais.nombre).numericCode : null
       })
 
       client.set('observation', xubioClient.descripcion)
