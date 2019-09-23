@@ -9,15 +9,19 @@ class Provider extends Parse.Object {
     const xubioProvider = {}
     const address = this.get('address')
 
+    const province = address && address.province ? commonFunctions.getArgProvinceById(address.province) : null
+    const country = address && address.country ? commonFunctions.getCountryByNumericCode(address.country) : null
+    const docType = this.get('docType')
+
     xubioProvider.nombre = this.get('name')
     xubioProvider.identificacionTributaria = {
-      ID: this.get('docType')
+      ID: docType === 9 ? docType : 44
     }
     xubioProvider.categoriaFiscal = {
       ID: this.get('taxCategory')
     }
     xubioProvider.provincia = {
-      nombre: address ? commonFunctions.getArgProvinceById(address.province).provincia_nombre : ''
+      nombre: province ? province.provincia_nombre : ''
     }
     xubioProvider.direccion = address ? address.streetAddress : ''
     xubioProvider.email = this.get('email')
@@ -31,33 +35,42 @@ class Provider extends Parse.Object {
       ID: this.get('purchaseAccount')
     }
     xubioProvider.pais = {
-      nombre: address ? commonFunctions.getCountryByNumericCode(address.country).name : ''
+      nombre: country ? country.name : ''
     }
     xubioProvider.usrCode = this.get('userCode')
     xubioProvider.observaciones = this.get('observation')
-    xubioProvider.CUIT = this.get('docValue')
+    if (docType === 9) {
+      xubioProvider.CUIT = this.get('docValue')
+    }
 
     return xubioProvider
   }
 
   static async createFromXubio (xubioProvider) {
-    var provider = new Provider()
+    const provider = new Provider()
+
+    const province = xubioProvider && xubioProvider.provincia ? commonFunctions.getArgProvinceByName(xubioProvider.provincia.nombre) : null
+    const country = xubioProvider && xubioProvider.pais ? commonFunctions.getCountryByName(xubioProvider.pais.nombre) : null
 
     try {
       provider.set('externalId', xubioProvider.proveedorid)
-      provider.set('docValue', xubioProvider.CUIT)
+      if (xubioProvider && xubioProvider.CUIT) {
+        provider.set('docValue', xubioProvider.CUIT)
+      }
       provider.set('taxCategory', xubioProvider.categoriaFiscal && xubioProvider.categoriaFiscal.ID)
       provider.set('purchaseAccount', xubioProvider.cuentaCompra_id && xubioProvider.cuentaCompra_id.ID)
       provider.set('saleAccount', xubioProvider.cuentaVenta_id && xubioProvider.cuentaVenta_id.ID)
       provider.set('email', xubioProvider.email)
-      provider.set('docType', xubioProvider.identificacionTributaria && xubioProvider.identificacionTributaria.ID)
+      if (xubioProvider && xubioProvider.identificacionTributaria) {
+        provider.set('docType', xubioProvider.identificacionTributaria.ID)
+      }
       provider.set('name', xubioProvider.nombre)
 
       provider.set('address', {
         streetAddress: xubioProvider.direccion,
         postalCode: xubioProvider.codigoPostal,
-        province: xubioProvider.provincia ? commonFunctions.getArgProvinceByName(xubioProvider.provincia.nombre).provincia_id : null,
-        country: xubioProvider.pais ? commonFunctions.getCountryByName(xubioProvider.pais.nombre).numericCode : null
+        province: province ? province.provincia_id : '',
+        country: country ? country.numericCode : ''
       })
 
       provider.set('observation', xubioProvider.observaciones)

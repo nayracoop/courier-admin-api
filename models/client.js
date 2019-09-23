@@ -9,15 +9,25 @@ class Client extends Parse.Object {
     const xubioClient = {}
     const address = this.get('address')
 
+    const province = address && address.province ? commonFunctions.getArgProvinceById(address.province) : null
+    const country = address && address.country ? commonFunctions.getCountryByNumericCode(address.country) : null
+    const docType = this.get('docType')
+
     xubioClient.nombre = this.get('name')
+
+    // Xubio API 23/09/2019
+    // {} IdentificacionTributariaBean
+    // nombre string(optional)
+    // codigo string(optional)
+    // id integer(optional)
     xubioClient.identificacionTributaria = {
-      ID: this.get('docType')
+      ID: docType === 9 ? docType : 44
     }
     xubioClient.categoriaFiscal = {
       ID: this.get('taxCategory')
     }
     xubioClient.provincia = {
-      ID: address ? address.province : 43
+      nombre: province ? province.provincia_nombre : ''
     }
     xubioClient.direccion = address ? address.streetAddress : ''
     xubioClient.email = this.get('email')
@@ -31,10 +41,12 @@ class Client extends Parse.Object {
       ID: this.get('purchaseAccount')
     }
     xubioClient.pais = {
-      ID: address ? address.country : 1
+      nombre: country ? country.name : ''
     }
     xubioClient.usrCode = this.get('userCode')
-    xubioClient.CUIT = this.get('docValue')
+    if (docType === 9) {
+      xubioClient.CUIT = this.get('docValue')
+    }
 
     xubioClient.descripcion = this.get('observation')
 
@@ -42,23 +54,31 @@ class Client extends Parse.Object {
   }
 
   static async createFromXubio (xubioClient) {
-    var client = new Client()
+    const client = new Client()
+
+    const province = xubioClient && xubioClient.provincia ? commonFunctions.getArgProvinceByName(xubioClient.provincia.nombre) : null
+    const country = xubioClient && xubioClient.pais ? commonFunctions.getCountryByName(xubioClient.pais.nombre) : null
 
     try {
       client.set('externalId', xubioClient.cliente_id)
-      client.set('docValue', xubioClient.CUIT)
+      if (xubioClient && xubioClient.CUIT) {
+        client.set('docValue', xubioClient.CUIT)
+      }
       client.set('taxCategory', (xubioClient.categoriaFiscal ? xubioClient.categoriaFiscal.ID : null))
       client.set('purchaseAccount', (xubioClient.cuentaCompra_id ? xubioClient.cuentaCompra_id.ID : null))
       client.set('saleAccount', (xubioClient.cuentaVenta_id ? xubioClient.cuentaVenta_id.ID : null))
       client.set('email', xubioClient.email)
-      client.set('docType', (xubioClient.identificacionTributaria ? xubioClient.identificacionTributaria.ID : null))
+
+      if (xubioClient && xubioClient.identificacionTributaria) {
+        client.set('docType', xubioClient.identificacionTributaria.ID)
+      }
       client.set('name', xubioClient.nombre)
 
       client.set('address', {
         streetAddress: xubioClient.direccion,
         postalCode: xubioClient.codigoPostal,
-        province: xubioClient.provincia ? commonFunctions.getArgProvinceByName(xubioClient.provincia.nombre).provincia_id : null,
-        country: xubioClient.pais ? commonFunctions.getCountryByName(xubioClient.pais.nombre).numericCode : null
+        province: province ? province.provincia_id : '',
+        country: country ? country.numericCode : ''
       })
 
       client.set('observation', xubioClient.descripcion)

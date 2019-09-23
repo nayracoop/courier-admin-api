@@ -1,5 +1,5 @@
 const countries = require('../common/countries.min.json')
-const argProvinces = require('../common/arg_provinces.min.json')
+const argProvinces = require('../common/arg_provinces.json')
 
 const accentMap = { 'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u', 'Á': 'A', 'É': 'E', 'Í': 'I', 'Ó': 'O', 'Ú': 'U' }
 
