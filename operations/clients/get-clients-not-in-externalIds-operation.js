@@ -5,6 +5,23 @@ const getClientsNotInExternalIds = async (xubioClients) => {
 
   const query = new Parse.Query('Client')
   query.containedIn('externalId', xubioClientsIds)
+  query.select(['name',
+    'userCode',
+    'docType',
+    'docValue',
+    'taxCategory',
+    'cbu',
+    'email',
+    'notifications',
+    'phone',
+    'hasPerception',
+    'observation',
+    'externalId',
+    'businessName',
+    'purchaseAccount',
+    'saleAccount',
+    'addresses'])
+
   const clients = await query.find()
 
   const filteredClients = xubioClients.filter(xubioClient =>

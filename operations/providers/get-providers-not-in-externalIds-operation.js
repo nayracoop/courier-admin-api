@@ -5,6 +5,22 @@ const getProvidersNotInExternalIds = async (xubioProvider) => {
 
   const query = new Parse.Query('Provider')
   query.containedIn('externalId', xubioProviderIds)
+  query.select(['taxCategory',
+    'docType',
+    'docValue',
+    'externalId',
+    'userCode',
+    'name',
+    'businessName',
+    'address',
+    'email',
+    'phone',
+    'observation',
+    'purchaseAccount',
+    'saleAccount',
+    'isShipping',
+    'insurance'])
+    
   const providers = await query.find()
 
   const filteredProvider = xubioProvider.filter(xubioProvider =>
