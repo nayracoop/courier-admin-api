@@ -18,10 +18,6 @@ const postProduct = async ({ token_type, access_token }, product) => {
     method: 'POST',
     headers,
     body: product,
-    auth: {
-      'user': process.env.XUBIO_CLIENT_ID,
-      'pass': process.env.XUBIO_SECRET
-    },
     json: true
   }
   const resProduct = await rp(options)

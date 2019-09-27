@@ -33,7 +33,7 @@ const syncClients = async (req, res) => {
     const fullUnsynchedXubioClients = await Promise.all(unsynchedXubioClients.map(client => getClient(xubioToken, client.cliente_id)))
 
     const createClientsPromises = fullUnsynchedXubioClients.map(Client.createFromXubio)
-    const sendClientsPromises = clientsToBeSent.map(postClient)
+    const sendClientsPromises = clientsToBeSent.map(client => postClient(client, xubioToken))
 
     await Promise.all(createClientsPromises.concat(sendClientsPromises))
 
