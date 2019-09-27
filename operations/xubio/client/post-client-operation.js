@@ -28,9 +28,7 @@ const postClient = async (client, token = null) => {
     json: true
   }
 
-  console.log(options)
-  return Promise.resolve()
-  // return rp(options)
+  return rp(options)
 }
 
 module.exports = {

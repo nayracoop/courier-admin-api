@@ -33,7 +33,7 @@ const syncProviders = async (req, res) => {
     const fullUnsynchedXubioProviders = await Promise.all(unsynchedXubioProviders.map(provider => getProvider(xubioToken, provider.proveedorid)))
 
     const createProvidersPromises = fullUnsynchedXubioProviders.map(Provider.createFromXubio)
-    const sendProvidersPromises = providersToBeSent.map(postProvider)
+    const sendProvidersPromises = providersToBeSent.map(provider => postProvider(provider, xubioToken))
 
     await Promise.all(createProvidersPromises.concat(sendProvidersPromises))
 
