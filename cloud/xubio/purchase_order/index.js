@@ -9,7 +9,7 @@ module.exports = {
       const token = await xubioService.credential.getToken()
       for (const item of items) {
         try {
-          const purchaseOrder = await xubioService.purchaseOrder.create(token.token_type, token.access_token, createItem(item, shippingId))
+          const purchaseOrder = await xubioService.postPurchaseOrder(token, createItem(item, shippingId))
           res.success(purchaseOrder)
         } catch (e) {
           console.error(e.code, e.message)
