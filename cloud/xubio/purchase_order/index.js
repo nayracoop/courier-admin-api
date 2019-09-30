@@ -6,7 +6,7 @@ module.exports = {
     let shippingId = req.params.shippingId
     let items = req.params.items
     try {
-      const token = await xubioService.credential.getToken()
+      const token = await xubioService.getToken()
       for (const item of items) {
         try {
           const purchaseOrder = await xubioService.postPurchaseOrder(token, createItem(item, shippingId))

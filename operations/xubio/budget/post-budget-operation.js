@@ -18,10 +18,6 @@ const postBudget = async ({ token_type, access_token }, budget) => {
     method: 'POST',
     headers,
     body: budget,
-    auth: {
-      'user': process.env.XUBIO_CLIENT_ID,
-      'pass': process.env.XUBIO_SECRET
-    },
     json: true
   }
   const resBudget = await rp(options)
