@@ -21,7 +21,7 @@ const getClientsNotInExternalIds = async (xubioClients) => {
     'purchaseAccount',
     'saleAccount',
     'addresses'])
-
+  query.limit(1000)
   const clients = await query.find()
 
   const filteredClients = xubioClients.filter(xubioClient =>

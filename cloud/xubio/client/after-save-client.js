@@ -5,9 +5,9 @@ const afterSaveClient = async (req, res) => {
   try {
     const { clientId } = req.params
     const query = new Parse.Query('Client')
-    query.limit(0)
     query.doesNotExist('deletedAt')
     query.doesNotExist('synchedAt')
+    query.limit(1000)
     const client = await query.get(clientId)
 
     if (client) {

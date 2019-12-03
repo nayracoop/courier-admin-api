@@ -5,9 +5,9 @@ const afterSaveProvider = async (req, res) => {
   try {
     const { providerId } = req.params
     const query = new Parse.Query('Provider')
-    query.limit(0)
     query.doesNotExist('deletedAt')
     query.doesNotExist('synchedAt')
+    query.limit(1000)
     const provider = await query.get(providerId)
 
     if (provider) {

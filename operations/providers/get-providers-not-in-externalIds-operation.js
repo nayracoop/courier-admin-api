@@ -20,7 +20,7 @@ const getProvidersNotInExternalIds = async (xubioProvider) => {
     'saleAccount',
     'isShipping',
     'insurance'])
-    
+  query.limit(1000) 
   const providers = await query.find()
 
   const filteredProvider = xubioProvider.filter(xubioProvider =>

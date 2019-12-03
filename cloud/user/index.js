@@ -32,10 +32,10 @@ const removeFromRole = async (user, role) => {
 
 const buildQuery = () => {
   const query = new Parse.Query(Parse.User)
-  query.limit(0)
   query.ascending('name')
   query.doesNotExist('deletedAt')
   query.include('email')
+  query.limit(1000)
   return query
 }
 
