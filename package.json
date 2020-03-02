@@ -1,13 +1,13 @@
 {
   "name": "courier-admin-api",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
+  "description": "Dashboard to admin Courier entities and activities. Clients, providers and shippings",
   "main": "index.js",
   "repository": {
-    "type": "",
-    "url": ""
+    "type": "git",
+    "url": "https://github.com/nayracoop/courier-admin-api"
   },
-  "license": "",
+  "license": "GNU GPLv3",
   "dependencies": {
     "assert": "^1.4.1",
     "cors": "^2.8.4",
