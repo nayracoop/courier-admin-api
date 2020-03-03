@@ -50,7 +50,7 @@ Communication with UPS was planified but not implemented and it's not in our imm
 
 ### Use
 
-- In the configuration entry abobe you'll find details on how to complete your **`.env`** file.
+- In the configuration entry above you'll find details on how to complete your **`.env`** file.
 - Serve with [nodemon](https://nodemon.io/) using **`npm run dev`** :zap:
 
 ### Database migrations
